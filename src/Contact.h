@@ -5,14 +5,14 @@
 #include "Body.h"
 
 struct Contact {
-  Body* a;
-  Body* b;
+    Body* a;
+    Body* b;
 
-  Vec2 start;
-  Vec2 end;
+    Vec2 start;
+    Vec2 end;
 
-  Vec2 normal;
-  float depth;
+    Vec2 normal;
+    float depth;
 };
 
 #endif
