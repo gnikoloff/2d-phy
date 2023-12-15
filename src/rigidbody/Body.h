@@ -32,12 +32,15 @@ public:
   // Coefficient of friction
   float friction;
 
+  float boundingCircleRadius;
+
   // Pointer to the shape/geometry of this rigid body
   Shape* shape = nullptr;
 
   Body(const Shape& shape, float x, float y, float mass);
   Body(float radius, float x, float y, float mass);
   Body(float width, float height, float x, float y, float mass);
+  Body(const std::vector<Vec2> vertices, float x, float y, float mass, float empty0, float empty1);
   ~Body();
 
   Vec2 GetPosition() const;
@@ -72,6 +75,8 @@ public:
   void SetRestitution(const float restitution);
   float GetFriction() const;
   void SetFriction(const float friction);
+
+  float GetBoundingCircleRadius() const;
 
   bool IsStatic() const;
 

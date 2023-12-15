@@ -14,6 +14,7 @@ using namespace emscripten;
 
 EMSCRIPTEN_BINDINGS(Phy2D) {
   register_vector<Body*>("vector<Body*>");
+  register_vector<Vec2>("vector<Vec2>");
 
   // World
   class_<World>("World")
@@ -27,6 +28,8 @@ EMSCRIPTEN_BINDINGS(Phy2D) {
   class_<Body>("Body")
     .constructor<float, float, float, float>()
     .constructor<float, float, float, float, float>()
+    .constructor<const std::vector<Vec2>, float, float, float, float, float>()
+    
 
     .property("position", &Body::GetPosition, &Body::SetPosition)
     .property("velocity", &Body::GetVelocity, &Body::SetVelocity)
@@ -42,7 +45,7 @@ EMSCRIPTEN_BINDINGS(Phy2D) {
     .property("invI", &Body::GetInvI, &Body::SetInvI)
     .property("restitution", &Body::GetRestitution, &Body::SetRestitution)
     .property("friction", &Body::GetFriction, &Body::SetFriction)
-
+    .property("boundingCircleRadius", &Body::GetBoundingCircleRadius)
 
     .function("IsStatic", &Body::IsStatic)
     .function("AddForce", &Body::AddForce)

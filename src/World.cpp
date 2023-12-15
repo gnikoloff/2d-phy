@@ -67,12 +67,19 @@ void World::Update(float dt) {
     body->IntegrateForces(dt);
   }
 
-  // Check all the bodies with all other bodies detecting collisions
   for (int i = 0; i <= bodies.size() - 1; i++) {
     for (int j = i + 1; j < bodies.size(); j++) {
       Body* a = bodies[i];
       Body* b = bodies[j];
+      
+      // broadphase
+      const Vec2 ab = b->position - a->position;
+      const float radiusSum = a->boundingCircleRadius + b->boundingCircleRadius;
+      if (ab.MagnitudeSquared() > (radiusSum * radiusSum)) {
+        continue;
+      }
 
+      // narrowphase
       std::vector<Contact> contacts;
       if (CollisionDetection::IsColliding(a, b, contacts)) {
         for (auto contact : contacts) {

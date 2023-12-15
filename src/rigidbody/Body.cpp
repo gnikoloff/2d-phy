@@ -10,6 +10,10 @@ Body::Body(float width, float height, float x, float y, float mass) : Body(BoxSh
 
 }
 
+Body::Body(const std::vector<Vec2> vertices, float x, float y, float mass, float empty0, float empty1) : Body(PolygonShape(vertices), x, y, mass) {
+
+}
+
 Body::Body(const Shape& shape, float x, float y, float mass) {
   this->shape = shape.Clone();
   this->position = Vec2(x, y);
@@ -36,16 +40,23 @@ Body::Body(const Shape& shape, float x, float y, float mass) {
   else {
     this->invI = 0.0;
   }
-  //     std::cout << x << std::endl;
-  // std::cout << y << std::endl;
-  std::cout << this->mass << std::endl;
+
+  if (shape.GetType() == CIRCLE) {
+    const CircleShape& circleShape = static_cast<const CircleShape&>(shape);
+    this->boundingCircleRadius = circleShape.radius;
+  } else if (shape.GetType() == BOX) {
+    const BoxShape& boxShape = static_cast<const BoxShape&>(shape);
+    this->boundingCircleRadius = 0.5 * sqrt(boxShape.width * boxShape.width + boxShape.height * boxShape.height);
+  } else if (shape.GetType() == POLYGON) {
+    const PolygonShape& polyShape = static_cast<const PolygonShape&>(shape);
+    this->boundingCircleRadius = 0.5 * sqrt(polyShape.width * polyShape.width + polyShape.height * polyShape.height);
+  }
+  
   this->shape->UpdateVertices(rotation, position);
-  std::cout << "Body constructor called!" << std::endl;
 }
 
 Body::~Body() {
   delete shape;
-  std::cout << "Body destructor called!" << std::endl;
 }
 
 Vec2 Body::GetPosition() const {
@@ -158,6 +169,10 @@ float Body::GetFriction() const {
 
 void Body::SetFriction(const float friction) {
   this->friction = friction;
+}
+
+float Body::GetBoundingCircleRadius() const {
+  return boundingCircleRadius;
 }
 
 bool Body::IsStatic() const {
