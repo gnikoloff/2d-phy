@@ -1,8 +1,5 @@
 build:
-	emcc -lembind -O3 -s TOTAL_MEMORY=83886080 -o quick_example.js ./src/EmscriptenBindings.cpp
-
-# build:
-# 	g++ -std=c++17 -Wall ./src/*.cpp -lm -o lib
+	emcc -lembind -O3 -s TOTAL_MEMORY=83886080 -o quick_example.js ./src/EmscriptenBindings.cpp --embind-emit-tsd interface.d.ts
 
 run:
 	./src
