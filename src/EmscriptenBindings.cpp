@@ -1,13 +1,14 @@
 #include <emscripten/bind.h>
 
 #include "World.cpp"
-#include "Body.cpp"
-#include "CollisionDetection.cpp"
-#include "Constraint.cpp"
-#include "Vec2.cpp"
-#include "VecN.cpp"
-#include "MatMN.cpp"
-#include "Shape.cpp"
+#include "rigidbody/Body.cpp"
+#include "rigidbody/Shape.cpp"
+#include "collisions/CollisionDetection.cpp"
+#include "constraints/Constraint.cpp"
+#include "constraints/PenetrationConstraint.cpp"
+#include "math/Vec2.cpp"
+#include "math/VecN.cpp"
+#include "math/MatMN.cpp"
 
 using namespace emscripten;
 
