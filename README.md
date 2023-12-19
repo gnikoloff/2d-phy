@@ -26,7 +26,13 @@ Lightweight 2D game physics engine.
   - Penetration
 - Constraints solver
 - Forces
+
   - Drag
   - Friction
   - Spring
   - Gravitation
+
+  ## References and readings
+
+- [Game Physics Engine Programming](https://pikuma.com/courses/game-physics-engine-programming)
+- [Game Physics Engine Development](https://www.amazon.de/-/en/Ian-Millington/dp/0123819768)
