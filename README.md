@@ -26,7 +26,6 @@ Lightweight 2D game physics engine.
   - Penetration
 - Constraints solver
 - Forces
-
   - Drag
   - Friction
   - Spring
