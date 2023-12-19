@@ -4,7 +4,6 @@
 
 CircleShape::CircleShape(float radius) {
   this->radius = radius;
-  std::cout << "CircleShape constructor called!" << std::endl;
 }
 
 float CircleShape::GetRadius() const {
@@ -16,7 +15,7 @@ void CircleShape::SetRadius(const float radius) {
 }
 
 CircleShape::~CircleShape() {
-  std::cout << "CircleShape destructor called!" << std::endl;
+  // ...
 }
 
 Shape* CircleShape::Clone() const {
@@ -56,12 +55,10 @@ PolygonShape::PolygonShape(const std::vector<Vec2> vertices) {
   }
   width = maxX - minX;
   height = maxY - minY;
-
-  std::cout << "PolygonShape constructor called!" << std::endl;
 }
 
 PolygonShape::~PolygonShape() {
-  std::cout << "PolygonShape destructor called!" << std::endl;
+  // ...
 }
 
 ShapeType PolygonShape::GetType() const {

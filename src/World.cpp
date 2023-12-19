@@ -2,11 +2,13 @@
 #include "Constants.h"
 #include "collisions/CollisionDetection.h"
 #include "constraints/PenetrationConstraint.h"
+#include "constraints/JointConstraint.h"
 #include <iostream>
 
-World::World(float gravity) {
+World::World(float gravity, float width, float height) {
   G = -gravity;
-  std::cout << "World constructor called!" << std::endl;
+  this->width = width;
+  this->height = height;
 }
 
 World::~World() {
@@ -16,7 +18,6 @@ World::~World() {
   for (auto constraint : constraints) {
     delete constraint;
   }
-  std::cout << "World destructor called!" << std::endl;
 }
 
 void World::AddBody(Body* body) {
@@ -27,7 +28,11 @@ std::vector<Body*>& World::GetBodies() {
   return bodies;
 }
 
-void World::AddConstraint(Constraint* constraint) {
+Body* World::GetBody(const int idx) {
+  return bodies[idx];
+}
+
+void World::AddJointConstraint(JointConstraint* constraint) {
   constraints.push_back(constraint);
 }
 
@@ -71,12 +76,22 @@ void World::Update(float dt) {
     for (int j = i + 1; j < bodies.size(); j++) {
       Body* a = bodies[i];
       Body* b = bodies[j];
-      
+
       // broadphase
-      const Vec2 ab = b->position - a->position;
-      const float radiusSum = a->boundingCircleRadius + b->boundingCircleRadius;
-      if (ab.MagnitudeSquared() > (radiusSum * radiusSum)) {
+      if (
+        (a->position.x + a->boundingCircleRadius < width * 0.5 && b->position.x - b->boundingCircleRadius > width * 0.5) ||
+        (b->position.x + b->boundingCircleRadius < width * 0.5 && a->position.x - a->boundingCircleRadius > width * 0.5) ||
+        (a->position.y + a->boundingCircleRadius < height * 0.5 && b->position.y - b->boundingCircleRadius > height * 0.5) ||
+        (b->position.y + b->boundingCircleRadius < height * 0.5 && a->position.y - a->boundingCircleRadius > height * 0.5)) {
         continue;
+      }
+
+      if (a->shape->GetType() != CIRCLE || b->shape->GetType() != CIRCLE) {
+        const Vec2 ab = b->position - a->position;
+        const float radiusSum = a->boundingCircleRadius + b->boundingCircleRadius;
+        if (ab.MagnitudeSquared() > (radiusSum * radiusSum)) {
+          continue;
+        }
       }
 
       // narrowphase
@@ -98,7 +113,7 @@ void World::Update(float dt) {
   for (auto& constraint : penetrations) {
     constraint.PreSolve(dt);
   }
-  for (int i = 0; i < 20; i++) {
+  for (int i = 0; i < 4; i++) {
     for (auto& constraint : constraints) {
       constraint->Solve();
     }

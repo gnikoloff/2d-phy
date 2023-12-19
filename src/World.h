@@ -3,10 +3,13 @@
 
 #include "rigidbody/Body.h"
 #include "constraints/Constraint.h"
+#include "constraints/JointConstraint.h"
 #include <vector>
 
 class World {
 private:
+  float width;
+  float height;
   float G = 9.8;
   std::vector<Body*> bodies;
   std::vector<Constraint*> constraints;
@@ -15,13 +18,14 @@ private:
   std::vector<float> torques;
 
 public:
-  World(float gravity);
+  World(float gravity, float width, float height);
   ~World();
 
   void AddBody(Body* body);
   std::vector<Body*>& GetBodies();
+  Body* GetBody(const int idx);
 
-  void AddConstraint(Constraint* constraint);
+  void AddJointConstraint(JointConstraint* constraint);
   std::vector<Constraint*>& GetConstraints();
 
   void AddForce(const Vec2& force);

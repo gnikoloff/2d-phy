@@ -12,6 +12,13 @@ JointConstraint::JointConstraint(Body* a, Body* b, const Vec2& anchorPoint) : Co
   cachedLambda.Zero();
 }
 
+Body* JointConstraint::GetBody(const int idx) {
+  if (idx == 0) {
+    return this->a;
+  }
+  return this->b;
+}
+
 void JointConstraint::PreSolve(const float dt) {
   // Get the anchor point position in world space
   const Vec2 pa = a->LocalSpaceToWorldSpace(aPoint);
@@ -47,7 +54,7 @@ void JointConstraint::PreSolve(const float dt) {
   b->ApplyImpulseAngular(impulses[5]);                   // B angular impulse
 
   // Compute the bias term (baumgarte stabilization)
-  const float beta = 0.2f;
+  const float beta = 0.5f;
   float C = (pb - pa).Dot(pb - pa);
   C = std::max(0.0f, C - 0.01f);
   bias = (beta / dt) * C;

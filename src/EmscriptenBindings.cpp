@@ -6,6 +6,7 @@
 #include "collisions/CollisionDetection.cpp"
 #include "constraints/Constraint.cpp"
 #include "constraints/PenetrationConstraint.cpp"
+#include "constraints/JointConstraint.cpp"
 #include "math/Vec2.cpp"
 #include "math/VecN.cpp"
 #include "math/MatMN.cpp"
@@ -18,18 +19,20 @@ EMSCRIPTEN_BINDINGS(Phy2D) {
 
   // World
   class_<World>("World")
-    .constructor<float>()
+    .constructor<float, float, float>()
     .function("AddBody", &World::AddBody, allow_raw_pointers())
     .function("GetBodies", &World::GetBodies, allow_raw_pointers())
+    .function("GetBody", &World::GetBody, allow_raw_pointers())
+    .function("AddJointConstraint", &World::AddJointConstraint, allow_raw_pointers())
     .function("Update", &World::Update)
-  ;
+    ;
 
   // Body
   class_<Body>("Body")
     .constructor<float, float, float, float>()
     .constructor<float, float, float, float, float>()
     .constructor<const std::vector<Vec2>, float, float, float, float, float>()
-    
+
 
     .property("position", &Body::GetPosition, &Body::SetPosition)
     .property("velocity", &Body::GetVelocity, &Body::SetVelocity)
@@ -52,20 +55,24 @@ EMSCRIPTEN_BINDINGS(Phy2D) {
     .function("AddTorque", &Body::AddTorque)
     .function("ClearForces", &Body::ClearForces)
     .function("ClearTorque", &Body::ClearTorque)
-  ;
+    ;
 
   // Shape
   enum_<ShapeType>("ShapeType")
     .value("CIRCLE", CIRCLE)
     .value("POLYGON", POLYGON)
     .value("BOX", BOX)
-  ;
+    ;
 
-  class_<CircleShape>("CircleShape")
-    .constructor<float>()
-    .property("radius", &CircleShape::GetRadius, &CircleShape::SetRadius)
-    .function("GetType", &CircleShape::GetType)
-  ;
+  class_<Constraint>("Constraint")
+    .constructor<>()
+    ;
+
+  class_<JointConstraint>("JointConstraint")
+    .constructor<>()
+    .constructor<Body*, Body*, Vec2&>()
+    .function("GetBody", &JointConstraint::GetBody, allow_raw_pointers())
+    ;
 
   // Vec2
   class_<Vec2>("Vec2")
@@ -85,5 +92,5 @@ EMSCRIPTEN_BINDINGS(Phy2D) {
     .function("Normal", &Vec2::Normal)
     .function("Dot", &Vec2::Dot)
     .function("Cross", &Vec2::Cross)
-  ;
+    ;
 }

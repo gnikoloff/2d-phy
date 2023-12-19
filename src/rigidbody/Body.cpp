@@ -18,7 +18,7 @@ Body::Body(const Shape& shape, float x, float y, float mass) {
   this->shape = shape.Clone();
   this->position = Vec2(x, y);
   this->velocity = Vec2(0, 0);
-  this->acceleration = Vec2(0, 0);
+  this->acceleration = Vec2(0, -10);
   this->rotation = 0.0;
   this->angularVelocity = 0.0;
   this->angularAcceleration = 0.0;
@@ -44,14 +44,16 @@ Body::Body(const Shape& shape, float x, float y, float mass) {
   if (shape.GetType() == CIRCLE) {
     const CircleShape& circleShape = static_cast<const CircleShape&>(shape);
     this->boundingCircleRadius = circleShape.radius;
-  } else if (shape.GetType() == BOX) {
+  }
+  else if (shape.GetType() == BOX) {
     const BoxShape& boxShape = static_cast<const BoxShape&>(shape);
     this->boundingCircleRadius = 0.5 * sqrt(boxShape.width * boxShape.width + boxShape.height * boxShape.height);
-  } else if (shape.GetType() == POLYGON) {
+  }
+  else if (shape.GetType() == POLYGON) {
     const PolygonShape& polyShape = static_cast<const PolygonShape&>(shape);
     this->boundingCircleRadius = 0.5 * sqrt(polyShape.width * polyShape.width + polyShape.height * polyShape.height);
   }
-  
+
   this->shape->UpdateVertices(rotation, position);
 }
 
@@ -129,6 +131,12 @@ float Body::GetMass() const {
 
 void Body::SetMass(const float mass) {
   this->mass = mass;
+  if (mass == 0) {
+    this->invMass = 0;
+  }
+  else {
+    this->invMass = 1 / mass;
+  }
 }
 
 float Body::GetInvMass() const {
