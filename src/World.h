@@ -28,6 +28,9 @@ public:
   void AddJointConstraint(JointConstraint* constraint);
   std::vector<Constraint*>& GetConstraints();
 
+  float GetGravity() const;
+  void SetGravity(const float gravity);
+
   void AddForce(const Vec2& force);
   void AddTorque(float torque);
 

@@ -17,6 +17,7 @@ export interface vector<Vec2> {
 }
 
 export interface World {
+  gravity: number;
   GetBodies(): vector<Body*>;
   AddBody(_0: Body): void;
   AddJointConstraint(_0: JointConstraint): void;

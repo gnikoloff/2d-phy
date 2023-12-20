@@ -20,6 +20,14 @@ World::~World() {
   }
 }
 
+float World::GetGravity() const {
+  return this->G;
+}
+
+void World::SetGravity(const float gravity) {
+  this->G = -gravity;
+}
+
 void World::AddBody(Body* body) {
   bodies.push_back(body);
 }

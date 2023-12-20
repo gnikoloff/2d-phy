@@ -20,6 +20,7 @@ EMSCRIPTEN_BINDINGS(Phy2D) {
   // World
   class_<World>("World")
     .constructor<float, float, float>()
+    .property("gravity", &World::GetGravity, &World::SetGravity)
     .function("AddBody", &World::AddBody, allow_raw_pointers())
     .function("GetBodies", &World::GetBodies, allow_raw_pointers())
     .function("GetBody", &World::GetBody, allow_raw_pointers())
